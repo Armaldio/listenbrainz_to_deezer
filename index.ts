@@ -151,6 +151,20 @@ const deezerAccessTokenURL = (code: string) =>
 
 // --- Start
 
+// checks
+
+const variables = [
+  'LISTEN_BRAINZ_TOKEN',
+  'DEEZER_ACCESS_TOKEN',
+  'DEEZER_PLAYLIST_NAME',
+]
+
+for (const envVar of variables) {
+  if (!process.env[envVar]) {
+    throw new Error('missing env var ' + envVar)
+  }
+}
+
 /// Listenbrainz
 
 const createdforPlaylists = await listenbrainz_GetCreatedForPlaylists();
