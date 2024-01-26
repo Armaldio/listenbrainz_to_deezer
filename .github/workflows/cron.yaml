@@ -22,4 +22,4 @@ jobs:
       with:
         cache: 'pnpm'
     - run: pnpm install
-    - run: pnpm run dev
+    - run: pnpm run prod
