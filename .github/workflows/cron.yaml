@@ -3,6 +3,12 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 5 * * 1' # At 06:00 every monday
+
+env:
+    LISTEN_BRAINZ_TOKEN: ${{ vars.LISTEN_BRAINZ_TOKEN }}
+    DEEZER_ACCESS_TOKEN: ${{ vars.DEEZER_ACCESS_TOKEN }}
+    DEEZER_PLAYLIST_NAME: ${{ vars.DEEZER_PLAYLIST_NAME }}
+
 jobs:
   cron:
     runs-on: ubuntu-latest
