@@ -110,7 +110,8 @@ const deezer_Search = (track: Partial<Track>) => {
     query += `album:"${track.album}" `
   }
   console.log(`searching "${query}"`)
-  url.searchParams.append('q', query)
+  url.searchParams.append('q', encodeURIComponent(query))
+  console.log('url', url)
   return fetch(
     url.href,
   ).then((res) => res.json()) as Promise<DeezerSearchOutput>;
@@ -136,7 +137,7 @@ const deezer_DeletePlaylist = (id: number) => {
 
 const deezer_AddTrackToPlaylist = (playlistId: string, songs: Array<number>) => {
   console.log('playlistId', playlistId)
-  console.log('songs', songs.join(','))
+  console.log('songs', songs.join(','), songs.length)
   return fetch(
     `https://api.deezer.com/playlist/${playlistId}/tracks?access_token=${process.env.DEEZER_ACCESS_TOKEN}&songs=${songs.join(',')}&request_method=POST`,
     {
