@@ -64,7 +64,7 @@ interface DeezerPlaylistsOutput {
 
 const listenbrainz_GetCreatedForPlaylists = () => {
   return fetch(
-    "https://api.listenbrainz.org/1/user/Armaldio/playlists/createdfor",
+    `https://api.listenbrainz.org/1/user/${process.env.LISTEN_BRAINZ_USER}/playlists/createdfor`,
     {
       headers: {
         Authorization: "Token " + process.env.LISTEN_BRAINZ_TOKEN,
@@ -75,7 +75,7 @@ const listenbrainz_GetCreatedForPlaylists = () => {
 
 const listenbrainz_GetPlaylist = (playlistId: string) => {
   return fetch(
-    "https://api.listenbrainz.org/1/playlist/" + playlistId,
+    `https://api.listenbrainz.org/1/playlist/${playlistId}`,
     {
       headers: {
         Authorization: "Token " + process.env.LISTEN_BRAINZ_TOKEN,
@@ -86,12 +86,12 @@ const listenbrainz_GetPlaylist = (playlistId: string) => {
 
 const deezer_ListPlaylists = () => {
   return fetch(
-    "https://api.deezer.com/user/me/playlists?access_token=" + process.env.DEEZER_ACCESS_TOKEN,
+    `https://api.deezer.com/user/me/playlists?access_token=${process.env.DEEZER_ACCESS_TOKEN}`,
   ).then((res) => res.json()) as Promise<DeezerPlaylistsOutput>;
 };
 
 const deezer_Search = (track: Partial<Track>) => {
-  const url = new URL("https://api.deezer.com/search?access_token=" + process.env.DEEZER_ACCESS_TOKEN)
+  const url = new URL(`https://api.deezer.com/search?access_token=${process.env.DEEZER_ACCESS_TOKEN}`)
   let query = ''
 
   if (track.title) {
@@ -146,9 +146,9 @@ const deezer_AddTrackToPlaylist = (playlistId: string, songs: Array<number>) => 
   ).then((res) => res.json()) as Promise<DeezerAddTrackToPlaylistOutput>;
 };
 
-const deezerAuthURL = `https://connect.deezer.com/oauth/auth.php?app_id=${process.env.DEEZER_APPID}&redirect_uri=${process.env.DEEZER_REDIRECT_URL}&perms=basic_access,email,manage_library,offline_access`;
-const deezerAccessTokenURL = (code: string) =>
-  `https://connect.deezer.com/oauth/access_token.php?app_id=${process.env.DEEZER_APPID}&secret=${process.env.DEEZER_SECRET}&code=${code}`;
+// const deezerAuthURL = `https://connect.deezer.com/oauth/auth.php?app_id=${process.env.DEEZER_APPID}&redirect_uri=${process.env.DEEZER_REDIRECT_URL}&perms=basic_access,email,manage_library,offline_access`;
+// const deezerAccessTokenURL = (code: string) =>
+//   `https://connect.deezer.com/oauth/access_token.php?app_id=${process.env.DEEZER_APPID}&secret=${process.env.DEEZER_SECRET}&code=${code}`;
 
 // --- Start
 
@@ -158,6 +158,8 @@ const variables = [
   'LISTEN_BRAINZ_TOKEN',
   'DEEZER_ACCESS_TOKEN',
   'DEEZER_PLAYLIST_NAME',
+  'LISTEN_BRAINZ_USER',
+  'LISTEN_BRAINZ_PLAYLIST_NAME',
 ]
 
 for (const envVar of variables) {
@@ -172,7 +174,7 @@ const createdforPlaylists = await listenbrainz_GetCreatedForPlaylists();
 
 const latestPlaylist = createdforPlaylists.playlists
   .filter((playlist) => {
-    return playlist.playlist.title.includes("Weekly Exploration");
+    return playlist.playlist.title.includes(process.env.LISTEN_BRAINZ_PLAYLIST_NAME);
   })
   .sort((a, b) => compareDesc(a.playlist.date, b.playlist.date))[0];
 
