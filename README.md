@@ -7,6 +7,10 @@
 ### Local
 
 2. Install dependencies
+```
+pnpm install
+```
+
 3. Create a `.env` file
 4. Fill it with the following variables:
 
